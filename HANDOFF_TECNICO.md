@@ -16,6 +16,7 @@ O projeto segue uma estrutura modular industrial para evitar acoplamento:
 - **`src/strategy/base.py`**: Classe abstrata (ABC) que define o contrato para todas as estratégias.
 - **`src/strategy/rsi_strategy.py`**: Primeira estratégia funcional (STR-0001).
 - **`src/strategy/trend_rsi_strategy.py`**: Estratégia evoluída com filtro SMA (STR-0002).
+- **`src/strategy/optimizer.py`**: Motor de otimização de hiperparâmetros via Optuna.
 - **`src/strategy/evolver.py`**: Motor de heurísticas que analisa métricas e propõe a `next_hypothesis`.
 - **`src/utils/reporter.py`**: Gerador de relatórios auditáveis em Markdown e JSON (inclui curva de equity).
 - **`main.py`**: Orquestrador do loop completo.

@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:46] - Infraestrutura: Motor de Otimização (Optuna)
-**Status:** Preparação para Otimização Automática
-**Objetivo:** Permitir a busca automática pelos melhores parâmetros de estratégia.
-**Resumo:** Adicionado `optuna` às dependências para iniciar a automação da Fase 5 (Otimização de Hiperparâmetros).
+## [2026-05-12 14:33] - Implementação: StrategyOptimizer (Fase 5)
+**Status:** Inteligência Computacional Ativa
+**Objetivo:** Automatizar a busca pelos melhores parâmetros de cada estratégia.
+**Resumo:** Criado o `StrategyOptimizer` utilizando o framework Optuna para realizar buscas Bayesianas de hiperparâmetros (SMA, RSI, Níveis).
 **Decisões:** 
-1. Uso do Optuna pela facilidade de integração com buscas Bayesianas.
-2. Base para transformar o "Evolver" em um otimizador real.
+1. Implementada função objetivo focada em Profit Factor com penalidade de amostragem.
+2. Integração com VectorBT para backtesting acelerado durante as trials.
