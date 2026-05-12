@@ -23,6 +23,7 @@ def load_reports(reports_dir='reports'):
                     "Drawdown %": data['metrics'].get('max_drawdown_pct'),
                     "Profit Factor": data['metrics'].get('profit_factor'),
                     "Win Rate %": data['metrics'].get('win_rate_pct'),
+                    "Stability Score": data['metrics'].get('stability_score', 0),
                     "Trades": data['metrics'].get('total_trades'),
                     "Final Value": data['metrics'].get('final_value'),
                     "Timestamp": data.get('timestamp')
