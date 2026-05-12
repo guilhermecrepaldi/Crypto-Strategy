@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:15] - Conclusão: Fase 1 (Orquestração)
-**Status:** Fase 1 Concluída (100%)
-**Objetivo:** Integrar ingestão e banco de dados em um fluxo único.
-**Resumo:** Criado `main.py` para orquestrar o download de OHLCV e registro no DuckDB.
+## [2026-05-12 13:16] - Início: Fase 2 (Estratégia Base)
+**Status:** Padronização Iniciada
+**Objetivo:** Criar uma interface comum para todas as estratégias futuras.
+**Resumo:** Implementada classe abstrata `BaseStrategy` integrando VectorBT para backtesting padronizado.
 **Decisões:** 
-1. `main.py` serve como entrypoint para popular o cache.
-2. Início imediato da Fase 2 (Estratégias).
+1. Uso de classes abstratas (ABC) para garantir integridade do contrato técnico.
+2. Integração nativa com métricas do VectorBT.
