@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 14:43] - Início: Pesquisa Avançada (Fase 6)
-**Status:** Ingestão On-chain Ativa
-**Objetivo:** Integrar fundamentos DeFi (Pendle Finance) como filtros de estratégia.
-**Resumo:** Criado `OnchainIngestor` para coletar TVL histórico do Pendle via DeFiLlama.
+## [2026-05-12 14:44] - Inovação: Estratégia Híbrida (STR-0003)
+**Status:** Alpha Test (On-chain Integrated)
+**Objetivo:** Usar fundamentos de rede (TVL) como filtro de sentimento.
+**Resumo:** Implementada a `OnchainRSIStrategy` que cruza dados de OHLCV com o TVL do Pendle Finance.
 **Decisões:** 
-1. Uso do TVL como indicador de "liquidez e confiança" no ecossistema de Yield.
-2. Armazenamento em Parquet para manter o padrão de cache imutável.
+1. Alinhamento de dados temporais via Forward Fill (`ffill`).
+2. Filtro de "Saúde do Ecossistema": Operar apenas com TVL em tendência de alta.
