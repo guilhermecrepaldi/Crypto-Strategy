@@ -6,6 +6,7 @@ from src.strategy.onchain_rsi_strategy import OnchainRSIStrategy
 from src.strategy.optimizer import StrategyOptimizer
 from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
+from src.utils.validator import WalkForwardValidator
 import os
 from datetime import datetime
 
@@ -51,8 +52,13 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False, use_onc
         print(f"Executando {strategy.name}...")
         portfolio = strategy.run_backtest(df)
     
-    # 6. Geração de Métricas e Evolução
+    # 6. Validação Estatística (Walk-Forward)
+    validator = WalkForwardValidator(strategy)
+    wf_results, stability_score = validator.validate(df)
+    
+    # 7. Geração de Métricas e Evolução
     metrics = strategy.get_metrics(portfolio)
+    metrics['stability_score'] = stability_score # Integrar score nas métricas
     
     # 4. Geração de Relatório com Evolução
     # Para evoluir, precisamos salvar o JSON primeiro ou simular o path
