@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:35] - Entrega: Handoff Técnico
-**Status:** Projeto Pronto para Transição
-**Objetivo:** Consolidar todo o conhecimento e progresso para a próxima IA/Equipe.
-**Resumo:** Criado `HANDOFF_TECNICO.md` detalhando arquitetura, stack e próximos passos. MVP 100% operacional.
+## [2026-05-12 13:45] - Evolução: TrendRSIStrategy (STR-0002)
+**Status:** Estratégia Evoluída Implementada
+**Objetivo:** Reduzir trades perdedores contra a tendência principal.
+**Resumo:** Criada a `TrendRSIStrategy` que combina RSI com uma Média Móvel Simples (SMA 200) como filtro de tendência.
 **Decisões:** 
-1. Documentação completa das Fases 1 a 5.
-2. Projeto devidamente commitado e organizado.
+1. Entradas permitidas apenas quando o preço está acima da SMA 200.
+2. Saída antecipada se a tendência de alta for quebrada.

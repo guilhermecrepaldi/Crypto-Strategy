@@ -1,6 +1,6 @@
 from src.data.ingestor import DataIngestor
 from src.database.manager import LocalDB
-from src.strategy.rsi_strategy import RSIStrategy
+from src.strategy.trend_rsi_strategy import TrendRSIStrategy
 from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
 import os
@@ -25,7 +25,8 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
     db.register_parquet(table_name, parquet_path)
     
     # 2. Execução da Estratégia
-    strategy = RSIStrategy()
+    # Alterado para STR-0002 (Evoluída)
+    strategy = TrendRSIStrategy()
     print(f"Executando {strategy.name}...")
     portfolio = strategy.run_backtest(df)
     
