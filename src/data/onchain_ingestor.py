@@ -30,7 +30,42 @@ class OnchainIngestor:
             print(f"Erro ao acessar DeFiLlama: {response.status_code}")
             return pd.DataFrame()
 
-    def save_onchain_data(self, df, protocol_name="pendle"):
+    def fetch_pendle_yields(self):
+        """
+        Busca todos os pools de yield do Pendle Finance via DeFiLlama Yields.
+        """
+        print("Buscando pools de Yield do Pendle...")
+        url = "https://yields.llama.fi/pools"
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            pools = data.get('data', [])
+            df = pd.DataFrame(pools)
+            
+            # Filtrar apenas Pendle
+            df_pendle = df[df['project'] == 'pendle'].copy()
+            print(f"Encontrados {len(df_pendle)} pools no Pendle.")
+            return df_pendle
+        return pd.DataFrame()
+
+    def fetch_pool_history(self, pool_uuid):
+        """
+        Busca o histórico de APY e TVL de um pool específico.
+        """
+        print(f"Buscando histórico do pool {pool_uuid}...")
+        url = f"https://yields.llama.fi/chart/{pool_uuid}"
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            history = data.get('data', [])
+            df = pd.DataFrame(history)
+            df['timestamp'] = pd.to_datetime(df['timestamp'])
+            return df
+        return pd.DataFrame()
+
+    def save_onchain_data(self, df, protocol_name="pendle", suffix="tvl"):
         """
         Salva os dados on-chain em formato Parquet para cache imutável.
         """
