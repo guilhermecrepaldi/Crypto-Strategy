@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:12] - Implementação: LocalDB (DuckDB)
-**Status:** Camada de Dados Concluída
-**Objetivo:** Prover uma interface SQL de alta performance sobre arquivos Parquet.
-**Resumo:** Implementada classe `LocalDB` que utiliza DuckDB para registrar Views de arquivos Parquet, permitindo queries SQL diretas.
+## [2026-05-12 13:15] - Conclusão: Fase 1 (Orquestração)
+**Status:** Fase 1 Concluída (100%)
+**Objetivo:** Integrar ingestão e banco de dados em um fluxo único.
+**Resumo:** Criado `main.py` para orquestrar o download de OHLCV e registro no DuckDB.
 **Decisões:** 
-1. Uso de persistência em `data/crypto_strategy.db`.
-2. Abstração de queries para facilitar transição futura para TimescaleDB.
+1. `main.py` serve como entrypoint para popular o cache.
+2. Início imediato da Fase 2 (Estratégias).
