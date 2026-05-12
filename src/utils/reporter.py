@@ -7,15 +7,15 @@ class StrategyReporter:
         self.reports_dir = reports_dir
         os.makedirs(reports_dir, exist_ok=True)
 
-    def generate_report(self, strategy_id, metrics, trades_sample, equity_series=None, run_id=None):
+    def generate_report(self, strategy_id, metrics, trades_sample, equity_series=None, next_hypothesis=None, run_id=None):
         """
         Gera os relatórios MD e JSON para uma execução.
         """
         if run_id is None:
             run_id = f"RUN-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         
-        md_content = self._build_markdown(strategy_id, run_id, metrics, trades_sample)
-        json_data = self._build_json(strategy_id, run_id, metrics, equity_series)
+        md_content = self._build_markdown(strategy_id, run_id, metrics, trades_sample, next_hypothesis)
+        json_data = self._build_json(strategy_id, run_id, metrics, equity_series, next_hypothesis)
         
         # Salvar MD
         md_path = os.path.join(self.reports_dir, f"{run_id}_{strategy_id}.md")
@@ -30,7 +30,7 @@ class StrategyReporter:
         print(f"Relatórios gerados em: {self.reports_dir}")
         return md_path, json_path
 
-    def _build_markdown(self, strategy_id, run_id, metrics, trades_sample):
+    def _build_markdown(self, strategy_id, run_id, metrics, trades_sample, next_hypothesis):
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         status = "Aprovada" if metrics['profit_factor'] > 1.5 else "Estudo"
         
@@ -69,10 +69,17 @@ class StrategyReporter:
         for trade in trades_sample:
             md += f"| {trade.get('entry_date')} | {trade.get('symbol')} | {trade.get('result_pct'):.2f}% |\n"
             
-        md += "\n---\n\n## 4. Próxima Hipótese\n\nAguardando diagnóstico evolutivo.\n"
+        md += "\n---\n\n## 4. Próxima Hipótese\n\n"
+        if next_hypothesis:
+            md += f"**Nova Estratégia Sugerida:** {next_hypothesis['next_strategy_id']}\n\n"
+            md += f"**Motivo:** {next_hypothesis['reason']}\n\n"
+            md += f"**Parâmetros Propostos:** `{json.dumps(next_hypothesis['params'])}`\n"
+        else:
+            md += "Aguardando diagnóstico evolutivo.\n"
+            
         return md
 
-    def _build_json(self, strategy_id, run_id, metrics, equity_series):
+    def _build_json(self, strategy_id, run_id, metrics, equity_series, next_hypothesis):
         equity_data = []
         if equity_series is not None:
             # Converter Series para lista de dicionários [{date, value}, ...]
@@ -86,6 +93,7 @@ class StrategyReporter:
             "strategy_id": strategy_id,
             "metrics": metrics,
             "equity_curve": equity_data,
+            "next_hypothesis": next_hypothesis,
             "timestamp": datetime.now().isoformat(),
             "status": "completed"
         }

@@ -1,6 +1,7 @@
 from src.data.ingestor import DataIngestor
 from src.database.manager import LocalDB
 from src.strategy.rsi_strategy import RSIStrategy
+from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
 import os
 from datetime import datetime
@@ -28,10 +29,14 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
     print(f"Executando {strategy.name}...")
     portfolio = strategy.run_backtest(df)
     
-    # 3. Geração de Métricas e Relatório
+    # 3. Geração de Métricas e Evolução
     metrics = strategy.get_metrics(portfolio)
     
-    # Extrair amostra de trades para o relatório
+    # 4. Geração de Relatório com Evolução
+    # Para evoluir, precisamos salvar o JSON primeiro ou simular o path
+    run_id = f"RUN-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    
+    # Amostra de trades
     trades = portfolio.trades.records_readable
     trades_sample = []
     for _, t in trades.head(5).iterrows():
@@ -40,13 +45,29 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
             "symbol": symbol,
             "result_pct": t['Return'] * 100
         })
+
+    # Simular a evolução antes de salvar o arquivo físico final
+    # Criamos um dict temporário para o evolver analisar
+    temp_run_data = {
+        "strategy_id": strategy.strategy_id,
+        "metrics": metrics
+    }
+    
+    # Criar um arquivo temporário para o evolver (ou modificar o evolver para aceitar dict)
+    # Por simplicidade industrial, vou instanciar o evolver e passar o dict se possível,
+    # mas o evolver atual espera um path. Vou ajustar o evolver para aceitar dict.
+    evolver = StrategyEvolver()
+    # Mock de evolução direta para este loop
+    next_hypo = evolver.evolve_from_dict(temp_run_data)
     
     reporter = StrategyReporter()
     md_path, json_path = reporter.generate_report(
         strategy.strategy_id, 
         metrics, 
         trades_sample,
-        equity_series=portfolio.value()
+        equity_series=portfolio.value(),
+        next_hypothesis=next_hypo,
+        run_id=run_id
     )
     
     print(f"\n--- Resultado da Rodada ---")

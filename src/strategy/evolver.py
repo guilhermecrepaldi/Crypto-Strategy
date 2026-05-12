@@ -7,11 +7,16 @@ class StrategyEvolver:
 
     def evolve(self, run_json_path):
         """
-        Lê o resultado de uma run e sugere a próxima mutação.
+        Lê o resultado de uma run de um arquivo e sugere a próxima mutação.
         """
         with open(run_json_path, 'r') as f:
             data = json.load(f)
-        
+        return self.evolve_from_dict(data)
+
+    def evolve_from_dict(self, data):
+        """
+        Analisa os dados de uma run e sugere a próxima mutação.
+        """
         metrics = data['metrics']
         strategy_id = data['strategy_id']
         
