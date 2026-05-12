@@ -1,12 +1,13 @@
 from src.data.ingestor import DataIngestor
 from src.database.manager import LocalDB
 from src.strategy.trend_rsi_strategy import TrendRSIStrategy
+from src.strategy.optimizer import StrategyOptimizer
 from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
 import os
 from datetime import datetime
 
-def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
+def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False):
     print(f"--- Iniciando Quant Strategy Loop [{symbol}] ---")
     
     # 1. Ingestão e Banco
@@ -24,13 +25,21 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
     table_name = symbol.replace('/', '_').lower()
     db.register_parquet(table_name, parquet_path)
     
-    # 2. Execução da Estratégia
-    # Alterado para STR-0002 (Evoluída)
-    strategy = TrendRSIStrategy()
+    # 2. Otimização (Opcional)
+    best_params = {}
+    if optimize:
+        print("Iniciando Otimização de Hiperparâmetros...")
+        optimizer = StrategyOptimizer(df)
+        best_params = optimizer.optimize_rsi_trend(n_trials=30)
+    
+    # 3. Execução da Estratégia
+    # Injetar os melhores parâmetros se houver
+    strategy = TrendRSIStrategy(**best_params) if best_params else TrendRSIStrategy()
+    
     print(f"Executando {strategy.name}...")
     portfolio = strategy.run_backtest(df)
     
-    # 3. Geração de Métricas e Evolução
+    # 4. Geração de Métricas e Evolução
     metrics = strategy.get_metrics(portfolio)
     
     # 4. Geração de Relatório com Evolução
