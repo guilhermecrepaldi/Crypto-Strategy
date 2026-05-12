@@ -1,5 +1,7 @@
 import os
 import json
+import numpy as np
+import pandas as pd
 from datetime import datetime
 
 class StrategyReporter:
@@ -22,10 +24,24 @@ class StrategyReporter:
         with open(md_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
             
+        # 2. Salvar JSON (Com conversão de tipos para evitar erros de serialização)
+        def convert_types(obj):
+            if isinstance(obj, (np.int64, np.int32)):
+                return int(obj)
+            if isinstance(obj, (np.float64, np.float32)):
+                return float(obj)
+            if isinstance(obj, pd.Timestamp):
+                return str(obj)
+            return obj
+
+        # Limpar o dict de métricas para serialização
+        serializable_metrics = {k: convert_types(v) for k, v in json_data['metrics'].items()}
+        json_data['metrics'] = serializable_metrics
+
         # Salvar JSON
         json_path = os.path.join(self.reports_dir, f"{run_id}_{strategy_id}.json")
         with open(json_path, 'w', encoding='utf-8') as f:
-            json.dump(json_data, f, indent=2)
+            json.dump(json_data, f, indent=4, default=convert_types)
             
         print(f"Relatórios gerados em: {self.reports_dir}")
         return md_path, json_path
