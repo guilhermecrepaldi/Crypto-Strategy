@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:24] - Conclusão: MVP (Loop Completo)
-**Status:** MVP 100% Operacional
-**Objetivo:** Integrar todas as camadas em um fluxo de backtesting auditável.
-**Resumo:** `main.py` atualizado para orquestrar o download, simulação (STR-0001) e exportação de relatórios.
+## [2026-05-12 13:25] - Implementação: Dashboard (Fase 4)
+**Status:** Interface Visual Iniciada
+**Objetivo:** Prover visualização interativa das métricas de trading.
+**Resumo:** Criado `dashboard.py` em Streamlit para visualização de rankings, métricas de retorno e gráficos de dispersão Risco vs Retorno.
 **Decisões:** 
-1. O sistema agora entrega valor real: relatórios MD/JSON automatizados.
-2. Pronto para transição para interface visual (Fase 4).
+1. Leitura direta de arquivos JSON da pasta `reports/` para desacoplamento.
+2. Uso de Plotly para gráficos interativos.
