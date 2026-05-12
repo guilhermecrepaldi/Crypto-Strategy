@@ -7,11 +7,12 @@ from src.strategy.optimizer import StrategyOptimizer
 from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
 from src.utils.validator import WalkForwardValidator
+from src.utils.logger import logger
 import os
 from datetime import datetime
 
 def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False, use_onchain=False):
-    print(f"--- Iniciando Quant Strategy Loop [{symbol}] ---")
+    logger.info(f"--- Iniciando Quant Strategy Loop [{symbol}] ---")
     
     # 1. Ingestão e Banco (Market Data)
     ingestor = DataIngestor()
@@ -19,7 +20,7 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False, use_onc
     df = ingestor.fetch_ohlcv(symbol, timeframe, since=since_date)
     
     if df.empty:
-        print("Falha ao baixar dados.")
+        logger.error("Falha ao baixar dados da exchange.")
         return
     
     # 2. Ingestão On-chain (Opcional - Fase 6)
@@ -38,18 +39,18 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False, use_onc
     # 4. Otimização (Opcional)
     best_params = {}
     if optimize:
-        print("Iniciando Otimização de Hiperparâmetros...")
+        logger.info("Iniciando Otimização de Hiperparâmetros via Optuna...")
         optimizer = StrategyOptimizer(df)
         best_params = optimizer.optimize_rsi_trend(n_trials=30)
     
     # 5. Execução da Estratégia
     if use_onchain and df_tvl is not None:
         strategy = OnchainRSIStrategy()
-        print(f"Executando {strategy.name} (Híbrida)...")
+        logger.info(f"Executando {strategy.name} (Híbrida)...")
         portfolio = strategy.run_backtest(df, df_tvl)
     else:
         strategy = TrendRSIStrategy(**best_params) if best_params else TrendRSIStrategy()
-        print(f"Executando {strategy.name}...")
+        logger.info(f"Executando {strategy.name}...")
         portfolio = strategy.run_backtest(df)
     
     # 6. Validação Estatística (Walk-Forward)
