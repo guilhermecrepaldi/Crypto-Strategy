@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:33] - Conclusão: Visualização Gráfica (Fase 4)
-**Status:** Dashboard 100% Funcional
-**Objetivo:** Permitir análise visual detalhada das simulações.
-**Resumo:** `dashboard.py` finalizado com integração de gráficos de linha para Curva de Equity e Scatter Plots para Risco vs Retorno.
+## [2026-05-12 13:34] - Implementação: StrategyEvolver (Fase 5)
+**Status:** Motor de Evolução Iniciado
+**Objetivo:** Automatizar a lógica de melhoria de estratégias entre rodadas.
+**Resumo:** Criada classe `StrategyEvolver` que analisa métricas de performance e sugere ajustes de parâmetros (ex: RSI window) baseados em heurísticas.
 **Decisões:** 
-1. Implementada seleção dinâmica de Run para detalhamento.
-2. O sistema agora é uma ferramenta analítica completa para o trader.
+1. Uso de lógica heurística para propor a `next_hypothesis`.
+2. Preparação para fechamento do loop evolutivo autônomo.
