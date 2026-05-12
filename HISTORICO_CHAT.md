@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 14:33] - Implementação: StrategyOptimizer (Fase 5)
-**Status:** Inteligência Computacional Ativa
-**Objetivo:** Automatizar a busca pelos melhores parâmetros de cada estratégia.
-**Resumo:** Criado o `StrategyOptimizer` utilizando o framework Optuna para realizar buscas Bayesianas de hiperparâmetros (SMA, RSI, Níveis).
+## [2026-05-12 14:43] - Início: Pesquisa Avançada (Fase 6)
+**Status:** Ingestão On-chain Ativa
+**Objetivo:** Integrar fundamentos DeFi (Pendle Finance) como filtros de estratégia.
+**Resumo:** Criado `OnchainIngestor` para coletar TVL histórico do Pendle via DeFiLlama.
 **Decisões:** 
-1. Implementada função objetivo focada em Profit Factor com penalidade de amostragem.
-2. Integração com VectorBT para backtesting acelerado durante as trials.
+1. Uso do TVL como indicador de "liquidez e confiança" no ecossistema de Yield.
+2. Armazenamento em Parquet para manter o padrão de cache imutável.

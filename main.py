@@ -1,16 +1,18 @@
 from src.data.ingestor import DataIngestor
+from src.data.onchain_ingestor import OnchainIngestor
 from src.database.manager import LocalDB
 from src.strategy.trend_rsi_strategy import TrendRSIStrategy
+from src.strategy.onchain_rsi_strategy import OnchainRSIStrategy
 from src.strategy.optimizer import StrategyOptimizer
 from src.strategy.evolver import StrategyEvolver
 from src.utils.reporter import StrategyReporter
 import os
 from datetime import datetime
 
-def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False):
+def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False, use_onchain=False):
     print(f"--- Iniciando Quant Strategy Loop [{symbol}] ---")
     
-    # 1. Ingestão e Banco
+    # 1. Ingestão e Banco (Market Data)
     ingestor = DataIngestor()
     since_date = ingestor.exchange.parse8601('2025-01-01T00:00:00Z')
     df = ingestor.fetch_ohlcv(symbol, timeframe, since=since_date)
@@ -19,27 +21,37 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h', optimize=False):
         print("Falha ao baixar dados.")
         return
     
+    # 2. Ingestão On-chain (Opcional - Fase 6)
+    df_tvl = None
+    if use_onchain:
+        onchain = OnchainIngestor()
+        df_tvl = onchain.fetch_pendle_tvl()
+        onchain.save_onchain_data(df_tvl)
+
+    # 3. Preparação do Banco
     parquet_path = ingestor.save_to_parquet(df, symbol, timeframe)
-    
     db = LocalDB()
     table_name = symbol.replace('/', '_').lower()
     db.register_parquet(table_name, parquet_path)
     
-    # 2. Otimização (Opcional)
+    # 4. Otimização (Opcional)
     best_params = {}
     if optimize:
         print("Iniciando Otimização de Hiperparâmetros...")
         optimizer = StrategyOptimizer(df)
         best_params = optimizer.optimize_rsi_trend(n_trials=30)
     
-    # 3. Execução da Estratégia
-    # Injetar os melhores parâmetros se houver
-    strategy = TrendRSIStrategy(**best_params) if best_params else TrendRSIStrategy()
+    # 5. Execução da Estratégia
+    if use_onchain and df_tvl is not None:
+        strategy = OnchainRSIStrategy()
+        print(f"Executando {strategy.name} (Híbrida)...")
+        portfolio = strategy.run_backtest(df, df_tvl)
+    else:
+        strategy = TrendRSIStrategy(**best_params) if best_params else TrendRSIStrategy()
+        print(f"Executando {strategy.name}...")
+        portfolio = strategy.run_backtest(df)
     
-    print(f"Executando {strategy.name}...")
-    portfolio = strategy.run_backtest(df)
-    
-    # 4. Geração de Métricas e Evolução
+    # 6. Geração de Métricas e Evolução
     metrics = strategy.get_metrics(portfolio)
     
     # 4. Geração de Relatório com Evolução

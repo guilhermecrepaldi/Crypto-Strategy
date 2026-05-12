@@ -15,6 +15,8 @@ O projeto segue uma estrutura modular industrial para evitar acoplamento:
 - **`src/database/manager.py`**: Camada SQL via DuckDB. Registra Views sobre os arquivos Parquet para queries de alta performance.
 - **`src/strategy/base.py`**: Classe abstrata (ABC) que define o contrato para todas as estratégias.
 - **`src/strategy/rsi_strategy.py`**: Primeira estratégia funcional (STR-0001).
+- **`src/data/onchain_ingestor.py`**: Coleta dados DeFi (Pendle/DeFiLlama) e persiste em Parquet.
+- **`src/strategy/onchain_rsi_strategy.py`**: Estratégia híbrida Preço + TVL (STR-0003).
 - **`src/strategy/trend_rsi_strategy.py`**: Estratégia evoluída com filtro SMA (STR-0002).
 - **`src/strategy/optimizer.py`**: Motor de otimização de hiperparâmetros via Optuna.
 - **`src/strategy/evolver.py`**: Motor de heurísticas que analisa métricas e propõe a `next_hypothesis`.
