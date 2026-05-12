@@ -7,7 +7,7 @@ class StrategyReporter:
         self.reports_dir = reports_dir
         os.makedirs(reports_dir, exist_ok=True)
 
-    def generate_report(self, strategy_id, metrics, trades_sample, run_id=None):
+    def generate_report(self, strategy_id, metrics, trades_sample, equity_series=None, run_id=None):
         """
         Gera os relatórios MD e JSON para uma execução.
         """
@@ -15,7 +15,7 @@ class StrategyReporter:
             run_id = f"RUN-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         
         md_content = self._build_markdown(strategy_id, run_id, metrics, trades_sample)
-        json_data = self._build_json(strategy_id, run_id, metrics)
+        json_data = self._build_json(strategy_id, run_id, metrics, equity_series)
         
         # Salvar MD
         md_path = os.path.join(self.reports_dir, f"{run_id}_{strategy_id}.md")
@@ -72,11 +72,20 @@ class StrategyReporter:
         md += "\n---\n\n## 4. Próxima Hipótese\n\nAguardando diagnóstico evolutivo.\n"
         return md
 
-    def _build_json(self, strategy_id, run_id, metrics):
+    def _build_json(self, strategy_id, run_id, metrics, equity_series):
+        equity_data = []
+        if equity_series is not None:
+            # Converter Series para lista de dicionários [{date, value}, ...]
+            equity_data = equity_series.reset_index().rename(columns={'index': 'date', 'value': 'equity'}).to_dict('records')
+            # Garantir que a data seja string
+            for item in equity_data:
+                item['date'] = str(item['date'])
+
         return {
             "run_id": run_id,
             "strategy_id": strategy_id,
             "metrics": metrics,
+            "equity_curve": equity_data,
             "timestamp": datetime.now().isoformat(),
             "status": "completed"
         }

@@ -42,7 +42,12 @@ def run_strategy_loop(symbol='BTC/USDT', timeframe='1h'):
         })
     
     reporter = StrategyReporter()
-    md_path, json_path = reporter.generate_report(strategy.strategy_id, metrics, trades_sample)
+    md_path, json_path = reporter.generate_report(
+        strategy.strategy_id, 
+        metrics, 
+        trades_sample,
+        equity_series=portfolio.value()
+    )
     
     print(f"\n--- Resultado da Rodada ---")
     print(f"Retorno Total: {metrics['total_return_pct']:.2f}%")

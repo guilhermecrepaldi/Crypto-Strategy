@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:25] - Implementação: Dashboard (Fase 4)
-**Status:** Interface Visual Iniciada
-**Objetivo:** Prover visualização interativa das métricas de trading.
-**Resumo:** Criado `dashboard.py` em Streamlit para visualização de rankings, métricas de retorno e gráficos de dispersão Risco vs Retorno.
+## [2026-05-12 13:26] - Refinamento: Séries Temporais no Relatório
+**Status:** Fidelidade de Dados Aumentada
+**Objetivo:** Permitir a visualização gráfica da evolução do capital.
+**Resumo:** `StrategyReporter` e `main.py` atualizados para capturar e persistir a curva de equity no JSON da Run.
 **Decisões:** 
-1. Leitura direta de arquivos JSON da pasta `reports/` para desacoplamento.
-2. Uso de Plotly para gráficos interativos.
+1. Conversão da série temporal do VectorBT para formato JSON-serializable.
+2. Preparação da base de dados para gráficos dinâmicos no dashboard.
