@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:24] - Implementação: StrategyReporter (Fase 3)
-**Status:** Motor de Relatórios Concluído
-**Objetivo:** Automatizar a geração de artefatos MD e JSON para auditoria.
-**Resumo:** Implementada classe `StrategyReporter` com suporte a cálculo de score e amostra de trades.
+## [2026-05-12 13:24] - Conclusão: MVP (Loop Completo)
+**Status:** MVP 100% Operacional
+**Objetivo:** Integrar todas as camadas em um fluxo de backtesting auditável.
+**Resumo:** `main.py` atualizado para orquestrar o download, simulação (STR-0001) e exportação de relatórios.
 **Decisões:** 
-1. Relatórios salvos em `reports/` com timestamp no Run ID.
-2. Formato Markdown compatível com a especificação do handoff.
+1. O sistema agora entrega valor real: relatórios MD/JSON automatizados.
+2. Pronto para transição para interface visual (Fase 4).
