@@ -53,12 +53,31 @@ if not df_reports.empty:
     c3.metric("Total de Runs", total_runs)
     c4.metric("Melhor Profit Factor", f"{best_pf:.2f}")
 
-    # Tabela de Ranking
-    st.subheader("🏆 Ranking de Execuções")
-    st.dataframe(df_filtered.sort_values(by="Return %", ascending=False), use_container_width=True)
+    # Seleção de Run para Detalhamento
+    st.subheader("🔍 Detalhes da Execução")
+    selected_run = st.selectbox("Selecione uma Run para ver o gráfico", options=df_filtered["Run ID"].unique())
+    
+    if selected_run:
+        # Localizar o arquivo JSON correspondente
+        run_data = None
+        for file in os.listdir('reports'):
+            if file.startswith(selected_run) and file.endswith('.json'):
+                with open(os.path.join('reports', file), 'r') as f:
+                    run_data = json.load(f)
+                break
+        
+        if run_data and "equity_curve" in run_data and run_data["equity_curve"]:
+            df_equity = pd.DataFrame(run_data["equity_curve"])
+            df_equity["date"] = pd.to_datetime(df_equity["date"])
+            
+            fig_equity = px.line(df_equity, x="date", y="equity", title=f"Evolução do Capital - {selected_run}")
+            fig_equity.update_layout(yaxis_title="Capital (BTC)", xaxis_title="Data")
+            st.plotly_chart(fig_equity, use_container_width=True)
+        else:
+            st.warning("Dados de curva de capital não encontrados para esta Run. Execute o main.py novamente para gerar novos dados.")
 
     # Gráfico de Dispersão Retorno x Drawdown
-    st.subheader("📈 Análise Risco x Retorno")
+    st.subheader("📈 Análise Comparativa: Risco x Retorno")
     fig = px.scatter(df_filtered, x="Drawdown %", y="Return %", color="Strategy", size="Trades", 
                      hover_data=["Run ID"], title="Retorno vs Drawdown por Execução")
     st.plotly_chart(fig, use_container_width=True)
