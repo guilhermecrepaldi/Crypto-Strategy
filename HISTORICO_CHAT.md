@@ -2,10 +2,10 @@
 Projeto: Estratégias de Criptoativos
 Início: 2026-05-12
 
-## [2026-05-12 13:45] - Evolução: TrendRSIStrategy (STR-0002)
-**Status:** Estratégia Evoluída Implementada
-**Objetivo:** Reduzir trades perdedores contra a tendência principal.
-**Resumo:** Criada a `TrendRSIStrategy` que combina RSI com uma Média Móvel Simples (SMA 200) como filtro de tendência.
+## [2026-05-12 13:46] - Infraestrutura: Motor de Otimização (Optuna)
+**Status:** Preparação para Otimização Automática
+**Objetivo:** Permitir a busca automática pelos melhores parâmetros de estratégia.
+**Resumo:** Adicionado `optuna` às dependências para iniciar a automação da Fase 5 (Otimização de Hiperparâmetros).
 **Decisões:** 
-1. Entradas permitidas apenas quando o preço está acima da SMA 200.
-2. Saída antecipada se a tendência de alta for quebrada.
+1. Uso do Optuna pela facilidade de integração com buscas Bayesianas.
+2. Base para transformar o "Evolver" em um otimizador real.
